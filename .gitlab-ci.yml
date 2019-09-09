@@ -1,0 +1,3 @@
+deploy_heroku:
+  script:
+    - bash ./deploy_heroku.sh
