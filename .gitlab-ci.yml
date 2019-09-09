@@ -1,3 +1,4 @@
 deploy_heroku:
   script:
-    - bash ./deploy_heroku.sh
+    - git remote add heroku https://heroku:256583bd-15f8-476f-9f21-99d993d6b4d6@git.heroku.com/orion-server.git
+    - git push -f heroku master
