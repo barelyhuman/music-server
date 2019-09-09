@@ -1,5 +1,6 @@
 const app = require('express')();
 const bodyParser = require('body-parser');
+const cors = require('cors');
 const boot = require('./boot');
 const routes = require('./routes');
 
@@ -9,6 +10,7 @@ app.get('/ping', (req, res) => {
     res.send('pong');
 });
 
+app.use(cors());
 app.use(bodyParser.json());
 
 boot.processBoot(app)
