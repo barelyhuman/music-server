@@ -1,4 +1,8 @@
 deploy_heroku:
   script:
-    - git remote add heroku https://heroku:256583bd-15f8-476f-9f21-99d993d6b4d6@git.heroku.com/orion-server.git
-    - git push -f heroku master
+    - apt-get update -qy
+    - apt-get install -y ruby-dev
+    - gem install dpl
+    - dpl --provider=heroku --app=orion-server --api-key=$HEROKU_DEPLOY_KEY
+  only:
+    - master
