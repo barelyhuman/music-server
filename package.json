@@ -8,6 +8,8 @@
     "express": "^4.17.1",
     "yt-search": "^0.4.1",
     "ytdl-core":"*"
-  
+  },
+  "scripts": {
+    "start":"node ."
   }
 }
