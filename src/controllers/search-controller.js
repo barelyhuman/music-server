@@ -8,24 +8,32 @@ const controllerConfig = {
 
 
 controllerConfig.controller.search = (req, res) => {
-    ytSearch({
-        query:req.query.searchTerm,
-        pageStart:0,
-        pageEnd:1
-    },function(err,r){
-        if(err) throw err;
-        const videos = r.videos;
-        res.send(videos);
-    });
+    if (!req.query.searchTerm) {
+        return res.status(400).send({
+            message: "Empty Search Term"
+        });
+    }
+
+    if (req.query.searchTerm) {
+        ytSearch({
+            query: req.query.searchTerm,
+            pageStart: 0,
+            pageEnd: 1
+        }, function (err, r) {
+            if (err) throw err;
+            const videos = r.videos;
+            res.send(videos);
+        });
+    }
 };
 
 controllerConfig.controller.play = (req, res) => {
-    ytdlcore(formatUrl(req.query.audioId),{format:'audioonly'}).pipe(res); 
+    ytdlcore(formatUrl(req.query.audioId), { format: 'audioonly' }).pipe(res);
 }
 
 
-function formatUrl(audioId){
-    return 'http://www.youtube.com/watch?v='+audioId
+function formatUrl(audioId) {
+    return 'http://www.youtube.com/watch?v=' + audioId
 }
 
 
