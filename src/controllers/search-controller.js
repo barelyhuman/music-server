@@ -36,11 +36,11 @@ controllerConfig.controller.play = (req, res) => {
         const rangeFromHeader = req.headers.range.replace(/bytes=/,'');
 
       options.range = rangeFromHeader;
-        
+      res.status(206);    
     }
 
-    res.status(206);
-    ytdlcore(formatUrl(req.query.audioId), options).pipe(res);
+    
+     ytdlcore(formatUrl(req.query.audioId), options).pipe(res);
 }
 
 
