@@ -29,38 +29,43 @@ controllerConfig.controller.search = (req, res) => {
 
 controllerConfig.controller.play = (req, res) => {
     const options = {
-        format: 'audioonly'
+        filter: 'audioonly'
     };
 
+    let parts = [];
+    let partialstart,
+        partialend, start, end;
     if (req.headers.range) {
-        const bytes = req.headers.range.replace(/bytes=/, '').split('-');
-        const partialStart = parseInt(bytes[0], 10);
-        const partialEnd = parseInt(bytes[1], 10);
-        if (partialEnd) {
-            options.range = {
-                start: partialStart,
-                end: partialEnd
-            };
-        }
-    };
+        parts = req.headers.range.replace(/bytes=/, '').split("-");
+        partialstart = parts[0];
+        partialend = parts[1] || false;
+        start = parseInt(partialstart, 10);
+        end = partialend ? parseInt(partialend, 10) : totalSize - 1;
+    }
+
+
+
 
     ytdlcore(formatUrl(req.query.audioId), options)
         .on('response', (data) => {
             const totalLength = data.headers['content-length'];
-            // if (options.range) {
-            //     const chunkSize = (options.range.end - options.range.start) + 1;
-            //     res.set('Accept-Ranges', 'bytes');
-            //     res.set('Content-Range', `bytes ${options.range.start}-${options.range.end}/${totalLength}`);
-            //     res.set('Content-Type', "audio/mp3");
-            //     res.set('Content-Length', chunkSize);
-            //     res.status(206);
-            // } else {
-            res.set('Accept-Ranges', 'bytes');
-            res.set('Content-Length', totalLength);
-            res.set('Content-Range', `bytes 0-${totalLength - 1}/${totalLength}`);
-            res.status(206);
-            // }
-        }).pipe(res);
+
+            res.set({
+                'Content-Range': 'bytes ' + start + '-' + end + '/' + totalLength,
+                'Accept-Ranges': 'bytes',
+                'Content-Type': 'audio/webm'
+            });
+
+            options.range = {
+                start,
+                end
+            };
+
+            ytdlcore(formatUrl(req.query.audioId), options).pipe(res);
+
+        });
+
+
 }
 
 
