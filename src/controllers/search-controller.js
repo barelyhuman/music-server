@@ -50,16 +50,20 @@ controllerConfig.controller.play = (req, res) => {
         .on('response', (data) => {
             const totalLength = data.headers['content-length'];
 
-            res.set({
-                'Content-Range': 'bytes ' + start + '-' + end + '/' + totalLength,
-                'Accept-Ranges': 'bytes',
-                'Content-Type': 'audio/webm'
-            });
+            if (req.headers.range) {
+                res.set({
+                    'Content-Range': 'bytes ' + start + '-' + end + '/' + totalLength,
+                    'Accept-Ranges': 'bytes',
+                    'Content-Type': 'audio/webm'
+                });
 
-            options.range = {
-                start,
-                end
-            };
+                res.status(206);
+
+                options.range = {
+                    start,
+                    end
+                };
+            }
 
             ytdlcore(formatUrl(req.query.audioId), options).pipe(res);
 
