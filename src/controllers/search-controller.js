@@ -40,36 +40,31 @@ controllerConfig.controller.play = (req, res) => {
         partialstart = parts[0];
         partialend = parts[1] || false;
         start = parseInt(partialstart, 10);
-        end = partialend ? parseInt(partialend, 10) : totalSize - 1;
     }
 
 
+    const url = formatUrl(req.query.audioId);
 
-
-    ytdlcore(formatUrl(req.query.audioId), options)
+    ytdlcore(url, options)
         .on('response', (data) => {
             const totalLength = data.headers['content-length'];
+            end = partialend ? parseInt(partialend, 10) : totalLength - 1;
 
             if (req.headers.range) {
-                res.set({
-                    'Content-Range': 'bytes ' + start + '-' + end + '/' + totalLength,
-                    'Accept-Ranges': 'bytes',
-                    'Content-Type': 'audio/webm'
-                });
-
-                res.status(206);
 
                 options.range = {
                     start,
                     end
                 };
+
+                res.set('Content-Range', 'bytes ' + start + '-' + end + '/' + totalLength);
+
+                res.status(206);
             }
 
-            ytdlcore(formatUrl(req.query.audioId), options).pipe(res);
+            ytdlcore(url, options).pipe(res);
 
         });
-
-
 }
 
 
