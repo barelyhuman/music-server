@@ -58,6 +58,8 @@ controllerConfig.controller.play = (req, res) => {
                 };
 
                 res.set('Content-Range', 'bytes ' + start + '-' + end + '/' + totalLength);
+                res.set('Content-Type', 'application/octet-stream');
+                res.set('Content-Disposition', 'attachment;filename=demo.mp3');
 
                 res.status(206);
             }
