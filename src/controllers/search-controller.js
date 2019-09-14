@@ -59,8 +59,6 @@ controllerConfig.controller.play = (req, res) => {
 
                 res.set('Content-Range', 'bytes ' + start + '-' + end + '/' + totalLength);
                 res.set('Content-Type', 'application/octet-stream');
-
-                res.status(206);
             }
 
             ytdlcore(url, options).pipe(res);
