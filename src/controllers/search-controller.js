@@ -29,7 +29,7 @@ controllerConfig.controller.search = (req, res) => {
 
 controllerConfig.controller.play = (req, res) => {
     const options = {
-        filter: 'audioonly'
+        filter: (format) => format.audioEncoding === "aac"
     };
 
     let parts = [];
@@ -45,26 +45,30 @@ controllerConfig.controller.play = (req, res) => {
 
     const url = formatUrl(req.query.audioId);
 
-    ytdlcore(url, options)
-        .on('response', (data) => {
-            const totalLength = data.headers['content-length'];
-            end = partialend ? parseInt(partialend, 10) : totalLength - 1;
+    ytdlcore(url, options).on('response', (response) => {
 
-            if (req.headers.range) {
 
-                options.range = {
-                    start,
-                    end
-                };
+        const totalLength = response.headers['content-length'];
 
-                res.set('Accept-Ranges', 'bytes');
-                res.set('Content-Range', 'bytes ' + start + '-' + end + '/' + totalLength);
-                res.set('Content-Type', 'application/octet-stream');
-            }
+        end = partialend ? parseInt(partialend, 10) : totalLength - 1;
 
-            ytdlcore(url, options).pipe(res);
+        if (req.headers.range) {
 
-        });
+            options.range = {
+                start,
+                end
+            };
+
+            res.set('Accept-Ranges', 'bytes');
+            res.set('Content-Range', 'bytes ' + start + '-' + end + '/' + totalLength);
+            res.set('Content-Type', 'audio/mpeg');
+            res.set('Transfer-Encoding', 'chunked');
+            res.status(206);
+        }
+
+        ytdlcore(url, options).pipe(res);
+
+    });
 }
 
 
