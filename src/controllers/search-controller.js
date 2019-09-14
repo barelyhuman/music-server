@@ -57,6 +57,7 @@ controllerConfig.controller.play = (req, res) => {
                     end
                 };
 
+                res.set('Accept-Ranges', 'bytes');
                 res.set('Content-Range', 'bytes ' + start + '-' + end + '/' + totalLength);
                 res.set('Content-Type', 'application/octet-stream');
             }
