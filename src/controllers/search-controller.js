@@ -34,7 +34,9 @@ controllerConfig.controller.search = (req, res) => {
                     videoId:item.videoId
                 }
             });
+
             res.send(formattedData);
+            
         });
     }
 };
