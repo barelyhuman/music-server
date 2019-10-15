@@ -22,7 +22,19 @@ controllerConfig.controller.search = (req, res) => {
         }, function (err, r) {
             if (err) throw err;
             const videos = r.videos;
-            res.send(videos);
+            const formattedData = videos.map(item=>{
+                return {
+                    title:item.title,
+                    author:{
+                        name:item.author.name
+                    },
+                    duration:{
+                        seconds:item.duration.seconds
+                    },
+                    videoId:item.videoId
+                }
+            });
+            res.send(formattedData);
         });
     }
 };
