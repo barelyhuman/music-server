@@ -19,24 +19,24 @@ controllerConfig.controller.search = (req, res) => {
             query: req.query.searchTerm,
             pageStart: 0,
             pageEnd: 1
-        }, function (err, r) {
+        }, function(err, r) {
             if (err) throw err;
             const videos = r.videos;
-            const formattedData = videos.map(item=>{
+            const formattedData = videos.map(item => {
                 return {
-                    title:item.title,
-                    author:{
-                        name:item.author.name
+                    title: item.title,
+                    author: {
+                        name: item.author.name
                     },
-                    duration:{
-                        seconds:item.duration.seconds
+                    duration: {
+                        seconds: item.duration.seconds
                     },
-                    videoId:item.videoId
+                    videoId: item.videoId
                 }
             });
 
             res.send(formattedData);
-            
+
         });
     }
 };
@@ -58,31 +58,34 @@ controllerConfig.controller.play = (req, res) => {
 
 
     const url = formatUrl(req.query.audioId);
+    try {
+        ytdlcore(url, options).on('response', (response) => {
 
-    ytdlcore(url, options).on('response', (response) => {
 
+            const totalLength = response.headers['content-length'];
 
-        const totalLength = response.headers['content-length'];
+            end = partialend ? parseInt(partialend, 10) : totalLength - 1;
 
-        end = partialend ? parseInt(partialend, 10) : totalLength - 1;
+            if (req.headers.range) {
 
-        if (req.headers.range) {
+                options.range = {
+                    start,
+                    end
+                };
 
-            options.range = {
-                start,
-                end
-            };
+                res.set('Accept-Ranges', 'bytes');
+                res.set('Content-Range', 'bytes ' + start + '-' + end + '/' + totalLength);
+                res.set('Content-Type', 'audio/mpeg');
+                res.set('Transfer-Encoding', 'chunked');
+                res.status(206);
+            }
 
-            res.set('Accept-Ranges', 'bytes');
-            res.set('Content-Range', 'bytes ' + start + '-' + end + '/' + totalLength);
-            res.set('Content-Type', 'audio/mpeg');
-            res.set('Transfer-Encoding', 'chunked');
-            res.status(206);
-        }
+            ytdlcore(url, options).pipe(res);
 
-        ytdlcore(url, options).pipe(res);
-
-    });
+        });
+    } catch (err) {
+        console.log(err);
+    }
 }
 
 
