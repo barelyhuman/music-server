@@ -42,9 +42,7 @@ controllerConfig.controller.search = (req, res) => {
 };
 
 controllerConfig.controller.play = (req, res) => {
-    const options = {
-        filter: (format) => format.audioEncoding === "aac"
-    };
+    const options = {};
 
     let parts = [];
     let partialstart,
@@ -58,34 +56,43 @@ controllerConfig.controller.play = (req, res) => {
 
 
     const url = formatUrl(req.query.audioId);
-    try {
-        ytdlcore(url, options).on('response', (response) => {
 
+    const validUrl = ytdlcore.validateURL(url);
 
-            const totalLength = response.headers['content-length'];
+    console.log(validUrl);
 
-            end = partialend ? parseInt(partialend, 10) : totalLength - 1;
-
-            if (req.headers.range) {
-
-                options.range = {
-                    start,
-                    end
-                };
-
-                res.set('Accept-Ranges', 'bytes');
-                res.set('Content-Range', 'bytes ' + start + '-' + end + '/' + totalLength);
-                res.set('Content-Type', 'audio/mpeg');
-                res.set('Transfer-Encoding', 'chunked');
-                res.status(206);
-            }
-
-            ytdlcore(url, options).pipe(res);
-
-        });
-    } catch (err) {
-        console.log(err);
+    if (!validUrl) {
+        return res.status(400).send({
+            success: false,
+            message: "Video not playable"
+        })
     }
+
+    ytdlcore(url, options).on('response', (response) => {
+
+
+        const totalLength = response.headers['content-length'];
+
+        end = partialend ? parseInt(partialend, 10) : totalLength - 1;
+
+        if (req.headers.range) {
+
+            options.range = {
+                start,
+                end
+            };
+
+            res.set('Accept-Ranges', 'bytes');
+            res.set('Content-Range', 'bytes ' + start + '-' + end + '/' + totalLength);
+            res.set('Content-Type', 'audio/mpeg');
+            res.set('Transfer-Encoding', 'chunked');
+            res.status(206);
+        }
+
+        ytdlcore(url, options).pipe(res);
+
+    });
+
 }
 
 
