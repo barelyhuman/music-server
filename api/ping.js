@@ -1,13 +1,10 @@
 const cors = require('../lib/cors');
 const handler = (req,res) =>{
   if(req.method === 'GET'){
-    res.write(JSON.stringify({
-      pong:"pong"
-    }));
-    res.end();
+    res.send({pong:"pong"});
     return;
   }
-  res.statusCode = 404;
+  res.status(404);
   res.end();
   return;
 }

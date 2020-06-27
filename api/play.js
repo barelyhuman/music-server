@@ -22,12 +22,11 @@ const handler = (req, res) => {
 
 
       if (!validUrl) {
-        res.statusCode = 400
-        res.write(JSON.stringify({
+        res.status(400);
+        res.send({
           success: false,
           message: "Video not playable"
-        }));
-        res.end();
+        });
       }
 
       ytdlcore(url, options).on('response', (response) => {
@@ -58,16 +57,13 @@ const handler = (req, res) => {
       return;
 
     }
-    res.statusCode = 404;
-    res.end();
-    return;
+    res.status(404);
+    return res.end();
   } catch (err) {
-    res.setHeader('Content-Type', 'application/json');
-    res.write(JSON.stringify({
+    res.status(500);
+    res.send({
       error: 'Something went wrong...'
-    }));
-    res.statusCode = 500;
-    res.end();
+    });
     throw err;
   }
 }

@@ -5,12 +5,10 @@ const handler = (req, res) => {
   try {
     if(req.method === 'GET'){
       if (!req.query.searchTerm) {
-        res.statusCode=400;
-        res.write(JSON.stringify({
+        res.status(400);
+        return res.send({
           message: "Empty Search Term"
-        },null,2));
-        res.end();
-        return 
+        });
       }
   
       if (req.query.searchTerm) {
@@ -33,23 +31,18 @@ const handler = (req, res) => {
               videoId: item.videoId
             }
           });
-          res.setHeader('Content-Type', 'application/json');
-          res.write(JSON.stringify(formattedData,null,2));
-          res.end();
+          res.send(formattedData);
         });
       }
       return;
     }
-    res.statusCode = 404;
-    res.end();
-    return;
+    res.statu(404);
+    return res.end();
   } catch (err) {
-    res.setHeader('Content-Type', 'application/json');
-    res.write(JSON.stringify({
+    res.status(500);
+    res.send({
       error: 'Something went wrong...'
-    }));
-    res.statusCode = 500;
-    res.end();
+    });
     throw err;
   }
 }
