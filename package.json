@@ -8,7 +8,7 @@
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "routex": "github:barelyhuman/routex",
-    "yt-search": "^1.1.2",
+    "yt-search": "^2.0.1",
     "ytdl-core": "^2.1.5"
   },
   "scripts": {

@@ -12,13 +12,12 @@ const handler = (req, res) => {
       }
   
       if (req.query.searchTerm) {
-        ytSearch({
-          query: req.query.searchTerm,
-          pageStart: 0,
-          pageEnd: 1
-        }, function (err, r) {
-          if (err) throw err;
-          const videos = r.videos;
+        return ytSearch(req.query.searchTerm)
+        .then(result=>{
+          const videos = result.videos;
+
+          console.log({videos});
+
           const formattedData = videos.map(item => {
             return {
               title: item.title,
@@ -31,10 +30,15 @@ const handler = (req, res) => {
               videoId: item.videoId
             }
           });
-          res.send(formattedData);
+
+          return res.send(formattedData);
+        }).catch(err=>{
+          res.status(500);
+          return res.send({
+            error:"Oops! Something went wrong"
+          });
         });
       }
-      return;
     }
     res.statu(404);
     return res.end();
