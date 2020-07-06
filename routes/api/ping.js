@@ -1,4 +1,4 @@
-const cors = require('../lib/cors');
+const cors = require('../../lib/cors');
 const handler = (req,res) =>{
   if(req.method === 'GET'){
     res.send({pong:"pong"});

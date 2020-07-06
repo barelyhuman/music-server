@@ -1,5 +1,5 @@
 const ytSearch = require('yt-search');
-const cors = require('../lib/cors');
+const cors = require('../../lib/cors');
 
 const handler = (req, res) => {
   try {
@@ -15,8 +15,6 @@ const handler = (req, res) => {
         return ytSearch(req.query.searchTerm)
         .then(result=>{
           const videos = result.videos;
-
-          console.log({videos});
 
           const formattedData = videos.map(item => {
             return {

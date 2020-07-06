@@ -1,5 +1,5 @@
 const ytdlcore = require('ytdl-core');
-const cors = require('../lib/cors');
+const cors = require('../../lib/cors');
 
 const handler = (req, res) => {
   try {
