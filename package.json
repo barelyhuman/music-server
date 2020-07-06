@@ -12,6 +12,6 @@
     "ytdl-core": "^2.1.5"
   },
   "scripts": {
-    "start": "routex ."
+    "start": "routex -p $PORT"
   }
 }
