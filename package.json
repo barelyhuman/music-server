@@ -7,7 +7,7 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "routex": "github:barelyhuman/routex",
+    "routex": "github:barelyhuman/routex#preload-handlers",
     "yt-search": "^2.0.1",
     "ytdl-core": "^2.1.5"
   },
