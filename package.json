@@ -9,7 +9,7 @@
     "express": "^4.17.1",
     "ftrouter": "github:barelyhuman/ftrouter#0.0.2",
     "yt-search": "^2.0.1",
-    "ytdl-core": "^3.4.2"
+    "ytdl-core": "4.2.1"
   },
   "scripts": {
     "start": "ftrouter -d ./routes -p $PORT"
