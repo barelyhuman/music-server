@@ -1,6 +1,7 @@
 import app from 'ftrouter';
 import http from 'http';
 import path from 'path';
+require('dotenv').config()
 
 const PORT = process.env.PORT || 3000;
 
