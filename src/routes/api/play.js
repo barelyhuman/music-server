@@ -1,5 +1,5 @@
-const ytdlcore = require('ytdl-core');
-const cors = require('../../lib/cors');
+import ytdlcore from 'ytdl-core';
+import cors from '../../lib/cors';
 
 const handler = (req, res) => {
   try {
@@ -69,4 +69,4 @@ function formatUrl(audioId) {
   return 'http://www.youtube.com/watch?v=' + audioId;
 }
 
-module.exports = (req, res) => cors(req, res, handler);
+export default (req, res) => cors(req, res, handler);

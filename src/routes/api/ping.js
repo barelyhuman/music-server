@@ -1,4 +1,5 @@
-const cors = require('../../lib/cors');
+import cors from '../../lib/cors';
+
 const handler = (req, res) => {
   if (req.method === 'GET') {
     res.send({ pong: 'pong' });
@@ -9,4 +10,4 @@ const handler = (req, res) => {
   return;
 };
 
-module.exports = (req, res) => cors(req, res, handler);
+export default (req, res) => cors(req, res, handler);

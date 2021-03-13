@@ -1,5 +1,5 @@
-const ytSearch = require('yt-search');
-const cors = require('../../lib/cors');
+import ytSearch from 'yt-search';
+import cors from '../../lib/cors';
 
 const handler = (req, res) => {
   try {
