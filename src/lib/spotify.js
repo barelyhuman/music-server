@@ -6,6 +6,8 @@ import { chunk } from './chunk';
 const checkWebURL = /^http[s]*:\/\/open.spotify.com\/playlist\/(\w+)/i;
 const checkSpotifyURI = /spotify:playlist:(\w+)/;
 
+import pMap from 'p-map';
+
 let spotifyApi;
 
 const initClient = async () => {
@@ -58,19 +60,18 @@ export const searchPlaylist = async (
       formatSpotifyTrackToMusicObjects
     );
 
-    const batches = chunk(tracksFromPlaylist, 10);
-
-    const matchPromises = await Promise.all(batches.map(matchMultipleSongs));
-    const flatten = matchPromises.reduce((a, b) => a.concat(b), []);
-    return flatten;
+    const data = await pMap(
+      tracksFromPlaylist,
+      (track) => {
+        return matchSong(track);
+      },
+      { concurrency: 35 }
+    );
+    return data;
   } catch (err) {
     console.error(err);
     throw err;
   }
-};
-
-export const matchMultipleSongs = async (trackObjects) => {
-  return await Promise.all(trackObjects.map((item) => matchSong(item)));
 };
 
 export const matchSong = async (
@@ -87,9 +88,7 @@ export const matchSong = async (
     trackObject.title +
     '-' +
     (trackObject.author || []).map((item) => item.name).join(',');
-
   const response = await ytSearch(trackNameWithArtist);
-
   return formatToMusicReponse(response.videos[0]);
 };
 
