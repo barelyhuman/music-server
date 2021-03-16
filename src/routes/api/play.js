@@ -49,13 +49,13 @@ const handler = (req, res) => {
         }
 
         ytdlcore(url, options).pipe(res)
-        .on('error',err=>{
-          console.error(err)
-          res.status(500)
-    res.send({
-      error: 'Something went wrong...'
-    })
-        })
+          .on('error', err => {
+            console.error(err)
+            res.status(500)
+            res.send({
+              error: 'Something went wrong...'
+            })
+          })
       })
 
       return

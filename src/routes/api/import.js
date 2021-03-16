@@ -1,28 +1,11 @@
 import cors from '../../lib/cors'
-import {
-  isSpotifyLink,
-  parsePlayistURL,
-  searchPlaylist
-} from '../../lib/spotify'
+import { searchYoutubeForTracks } from '../../lib/youtube'
 
 const handler = async (req, res) => {
   try {
-    if (req.method === 'GET') {
-      const playlistUrl = req.query.url
-
-      if (!isSpotifyLink(playlistUrl)) {
-        res.status(400)
-        res.send({
-          success: false,
-          message: 'Not a spotify playlist'
-        })
-        return
-      }
-
-      const playistId = parsePlayistURL(playlistUrl)
-
-      const tracks = await searchPlaylist(playistId)
-
+    if (req.method === 'POST') {
+      const trackList = req.body.tracks
+      const tracks = await searchYoutubeForTracks(trackList)
       res.send({
         data: tracks
       })

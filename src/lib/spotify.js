@@ -1,8 +1,5 @@
-import ytsr from 'ytsr'
 
 import SpotifyWebApi from 'spotify-web-api-node'
-
-import pMap from 'p-map'
 
 const checkWebURL = /^http[s]*:\/\/open.spotify.com\/playlist\/(\w+)/i
 const checkSpotifyURI = /spotify:playlist:(\w+)/
@@ -46,52 +43,35 @@ export const isSpotifyLink = (urlString) => {
   return true
 }
 
-export const searchPlaylist = async (
-  playlistLink = process.env.TESTPLAYLIST
+export const getAllTracksFromPlaylist = async (playlistLink
+= process.env.TESTPLAYLIST
 ) => {
   try {
     // check and init the client if needed
     await initClient()
+    let tracks = []
     const playlist = await spotifyApi.getPlaylist(playlistLink)
+    const totalItems = playlist.body.tracks.total
 
-    const tracksFromPlaylist = playlist.body.tracks.items.map(
+    tracks = tracks.concat(playlist.body.tracks.items.map(
       formatSpotifyTrackToMusicObjects
-    )
+    ))
+    let offset = 100
+    const limit = 100
+    while (tracks.length < totalItems) {
+      const response = await spotifyApi.getPlaylistTracks(playlistLink, {
+        offset: offset,
+        limit: limit
+      })
+      tracks = tracks.concat(response.body.items.map(formatSpotifyTrackToMusicObjects))
+      offset += limit
+    }
 
-    const data = await pMap(
-      tracksFromPlaylist,
-      (track) => {
-        return matchSong(track)
-      }
-      ,
-      { concurrency: 10 }
-    )
-    return data
+    return tracks
   } catch (err) {
     console.error(err)
     throw err
   }
-}
-
-export const matchSong = async (
-  trackObject = {
-    title: '',
-    author: [
-      {
-        name: ''
-      }
-    ]
-  }
-) => {
-  const trackNameWithArtist =
-    trackObject.title +
-    '-' +
-    (trackObject.author || []).map((item) => item.name).join(',')
-
-  const response = await ytsr(trackNameWithArtist, {
-    limit: 1
-  })
-  return formatToMusicReponse(response.items[0])
 }
 
 export const formatSpotifyTrackToMusicObjects = (spotifyTrack) => {
@@ -101,22 +81,4 @@ export const formatSpotifyTrackToMusicObjects = (spotifyTrack) => {
       name: item.name
     }))
   }
-}
-
-export const formatToMusicReponse = (ytSearchResponseObject) => {
-  return {
-    title: ytSearchResponseObject.title,
-    author: {
-      name: ytSearchResponseObject.author.name
-    },
-    duration: {
-      seconds: ytSearchResponseObject.duration.seconds
-    },
-    videoId: ytSearchResponseObject.id
-  }
-}
-
-if (require.main === module) {
-  require('dotenv').config()
-  initClient().then((_) => searchPlaylist())
 }
