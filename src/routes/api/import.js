@@ -1,42 +1,42 @@
-import cors from '../../lib/cors';
+import cors from '../../lib/cors'
 import {
   isSpotifyLink,
   parsePlayistURL,
-  searchPlaylist,
-} from '../../lib/spotify';
+  searchPlaylist
+} from '../../lib/spotify'
 
 const handler = async (req, res) => {
   try {
     if (req.method === 'GET') {
-      const playlistUrl = req.query.url;
+      const playlistUrl = req.query.url
 
       if (!isSpotifyLink(playlistUrl)) {
-        res.status(400);
+        res.status(400)
         res.send({
           success: false,
-          message: 'Not a spotify playlist',
-        });
+          message: 'Not a spotify playlist'
+        })
         return
       }
 
-      const playistId = parsePlayistURL(playlistUrl);
+      const playistId = parsePlayistURL(playlistUrl)
 
-      const tracks = await searchPlaylist(playistId);
+      const tracks = await searchPlaylist(playistId)
 
       res.send({
-        data: tracks,
-      });
+        data: tracks
+      })
     }
-    res.status(404);
-    return res.end();
+    res.status(404)
+    return res.end()
   } catch (err) {
-    console.error(err);
-    res.status(500);
+    console.error(err)
+    res.status(500)
     res.send({
-      error: 'Something went wrong...',
-    });
-    throw err;
+      error: 'Something went wrong...'
+    })
+    throw err
   }
-};
+}
 
-export default (req, res) => cors(req, res, handler);
+export default (req, res) => cors(req, res, handler)

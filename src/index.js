@@ -1,22 +1,22 @@
-import app from 'ftrouter';
-import http from 'http';
-import path from 'path';
+import app from 'ftrouter'
+import http from 'http'
+import path from 'path'
 require('dotenv').config()
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3000
 
-async function main() {
+async function main () {
   const handler = await app({
-    basePath: path.join(__dirname, 'routes'),
-  });
+    basePath: path.join(__dirname, 'routes')
+  })
 
   http
     .createServer((req, res) => {
-      handler(req, res);
+      handler(req, res)
     })
     .listen(PORT, () => {
-      console.log('Listening on, ' + PORT);
-    });
+      console.log('Listening on, ' + PORT)
+    })
 }
 
-main();
+main()

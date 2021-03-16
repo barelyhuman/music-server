@@ -1,4 +1,4 @@
-import cors from '../lib/cors';
+import cors from '../lib/cors'
 
 const handler = (req, res) => {
   if (req.method === 'GET') {
@@ -6,31 +6,30 @@ const handler = (req, res) => {
       routes: [
         {
           description: 'Ping the server to check status',
-          url: 'api/ping',
+          url: 'api/ping'
         },
         {
           description:
             'Return a partial supported response for audio tags to play the track',
           url: 'api/play',
-          queryParams: ['audioId'],
+          queryParams: ['audioId']
         },
         {
           description: 'Search for tracks',
           url: 'api/search',
-          queryParams: ['searchTerm'],
+          queryParams: ['searchTerm']
         },
         {
           description:
             'Import a playlist from external sources, (supports only spotify right now)',
           url: 'api/import',
-          queryParams: ['url'],
-        },
-      ],
-    });
+          queryParams: ['url']
+        }
+      ]
+    })
   }
-  res.status(404);
-  res.end();
-  return;
-};
+  res.status(404)
+  res.end()
+}
 
-export default (req, res) => cors(req, res, handler);
+export default (req, res) => cors(req, res, handler)

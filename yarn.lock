@@ -882,6 +882,11 @@
     readdirp "^2.2.1"
     upath "^1.1.1"
 
+"@yimura/scraper@^1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@yimura/scraper/-/scraper-1.1.0.tgz#e5df935ea14a4d511298b861adb4980c712b785d"
+  integrity sha512-oX6mXIZS4QaSgdDJJgRT/xzHRpYkdn3cz/YqlYJSGch9XRSY1PMJB8s8TN0QYsgvWKS1IM+UhVd9qqtS60H87Q==
+
 aggregate-error@^3.0.0:
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/aggregate-error/-/aggregate-error-3.1.0.tgz#92670ff50f5359bdb7a3e0d40d0ec30c5737687a"
@@ -2440,7 +2445,7 @@ mimic-fn@^2.1.0:
   resolved "https://registry.yarnpkg.com/mimic-fn/-/mimic-fn-2.1.0.tgz#7ed2c2ccccaf84d3ffcb7a69b57711fc2083401b"
   integrity sha512-OqbOk5oEQeAZ8WXWydlu9HJjz9WVdEIvamMCcXmuqUYjTknH/sqsWvhQ3vgwKFRR1HpjvNBKQ37nbJgYzGqGcg==
 
-miniget@^4.0.0:
+miniget@^4.0.0, miniget@^4.2.0:
   version "4.2.0"
   resolved "https://registry.yarnpkg.com/miniget/-/miniget-4.2.0.tgz#0004e95536b192d95a7d09f4435d67b9285481d0"
   integrity sha512-IzTOaNgBw/qEpzkPTE7X2cUVXQfSKbG8w52Emi93zb+Zya2ZFrbmavpixzebuDJD9Ku4ecbaFlC7Y1cEESzQtQ==
@@ -3348,3 +3353,10 @@ ytdl-core@^4.5.0:
     m3u8stream "^0.8.3"
     miniget "^4.0.0"
     sax "^1.1.3"
+
+ytsr@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/ytsr/-/ytsr-3.3.1.tgz#080e655e0cc4a41bc483f1f19ebbb53c5df7a1ce"
+  integrity sha512-OVFREa9GmtMlPhdSLLK30QX8JKf9Zy6xfBm6R/oJ2mjEaEmVC8vmE5C522lWNG553xZOZL4wkeTSPuFLZbo0PA==
+  dependencies:
+    miniget "^4.2.0"
