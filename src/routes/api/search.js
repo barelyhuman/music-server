@@ -32,6 +32,7 @@ const handler = (req, res) => {
             return res.send(formattedData)
           })
           .catch((err) => {
+            connsole.error(err);
             res.status(500)
             return res.send({
               error: 'Oops! Something went wrong'

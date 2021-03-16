@@ -1,7 +1,6 @@
 import ytsr from 'ytsr'
 
 import SpotifyWebApi from 'spotify-web-api-node'
-import { chunk } from './chunk'
 
 import pMap from 'p-map'
 
