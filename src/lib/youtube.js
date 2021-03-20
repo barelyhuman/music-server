@@ -33,7 +33,7 @@ export const formatToMusicReponse = (ytSearchResponseObject) => {
       name: ytSearchResponseObject && ytSearchResponseObject.author && ytSearchResponseObject.author.name
     },
     duration: {
-      seconds: ytSearchResponseObject.duration.seconds
+      seconds: ytSearchResponseObject && ytSearchResponseObject.duration && ytSearchResponseObject.duration.seconds || 0
     },
     videoId: ytSearchResponseObject.id
   }
