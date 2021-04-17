@@ -21,41 +21,44 @@ const handler = (req, res) => {
 
       if (!validUrl) {
         res.status(400)
-        res.send({
+        return res.send({
           success: false,
           message: 'Video not playable'
         })
       }
 
-      ytdlcore(url, options).on('response', (response) => {
-        const totalLength = response.headers['content-length']
+      ytdlcore(url, options).on('response', function (response) {
+        try {
+          const totalLength = response.headers['content-length']
 
-        end = partialend ? parseInt(partialend, 10) : totalLength - 1
+          end = partialend ? parseInt(partialend, 10) : totalLength - 1
 
-        if (req.headers.range) {
-          options.range = {
-            start,
-            end
+          if (req.headers.range && !res.headerSent) {
+            options.range = {
+              start,
+              end
+            }
+
+            res.setHeader('Accept-Ranges', 'bytes')
+            res.setHeader(
+              'Content-Range',
+              'bytes ' + start + '-' + end + '/' + totalLength
+            )
+            res.setHeader('Content-Type', 'audio/mpeg')
+            res.setHeader('Transfer-Encoding', 'chunked')
+            res.statusCode = 206
           }
 
-          res.setHeader('Accept-Ranges', 'bytes')
-          res.setHeader(
-            'Content-Range',
-            'bytes ' + start + '-' + end + '/' + totalLength
-          )
-          res.setHeader('Content-Type', 'audio/mpeg')
-          res.setHeader('Transfer-Encoding', 'chunked')
-          res.statusCode = 206
-        }
-
-        ytdlcore(url, options).pipe(res)
-          .on('error', err => {
-            console.error(err)
+          this.pipe(res).on('error', (err) => {
+            console.log(err)
             res.status(500)
             res.send({
               error: 'Something went wrong...'
             })
           })
+        } catch (err) {
+          console.log(err)
+        }
       })
 
       return
@@ -65,10 +68,9 @@ const handler = (req, res) => {
   } catch (err) {
     console.error(err)
     res.status(500)
-    res.send({
+    return res.send({
       error: 'Something went wrong...'
     })
-    throw err
   }
 }
 

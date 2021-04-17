@@ -6,10 +6,10 @@ export async function hbJSONParser (req) {
       data += chunk
     })
     req.on('end', () => {
-      if(data.length){
+      if (data.length) {
         const body = JSON.parse(data)
         resolve(body)
-      }else{
+      } else {
         resolve({})
       }
     })

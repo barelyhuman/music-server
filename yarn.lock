@@ -2285,7 +2285,7 @@ fsevents@~2.3.1:
 
 ftrouter@barelyhuman/ftrouter:
   version "0.0.3-1"
-  resolved "https://codeload.github.com/barelyhuman/ftrouter/tar.gz/76751c50f9e1ac1c3323066797c6b47fd202ce49"
+  resolved "https://codeload.github.com/barelyhuman/ftrouter/tar.gz/437e2beaaea2f8bcadb592e49890fb5554de00ea"
   dependencies:
     git-clone "^0.1.0"
     inquirer "^8.0.0"

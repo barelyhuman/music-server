@@ -14,10 +14,10 @@ async function main () {
   http
     .createServer((req, res) => {
       hbJSONParser(req)
-      .then((json)=>{
-        req.body = json
-        handler(req, res)
-      })
+        .then((json) => {
+          req.body = json
+          handler(req, res)
+        })
     })
     .listen(PORT, () => {
       console.log('Listening on, ' + PORT)
