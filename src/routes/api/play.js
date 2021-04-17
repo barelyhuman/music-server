@@ -33,7 +33,7 @@ const handler = (req, res) => {
 
           end = partialend ? parseInt(partialend, 10) : totalLength - 1
 
-          if (req.headers.range && !res.headerSent) {
+          if (req.headers.range) {
             options.range = {
               start,
               end
