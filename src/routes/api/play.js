@@ -27,8 +27,8 @@ const handler = (req, res) => {
         })
       }
 
-      const stream = ytdlcore(url, options);
-      stream.on('response', function (response) {
+      
+      ytdlcore(url, options).on('response', function (response) {
         try {
           const totalLength = response.headers['content-length']
 
@@ -50,7 +50,7 @@ const handler = (req, res) => {
             res.statusCode = 206
           }
 
-          stream.pipe(res).on('error', (err) => {
+          ytdlcore(url, options).pipe(res).on('error', (err) => {
             console.log(err)
             res.status(500)
             res.send({
