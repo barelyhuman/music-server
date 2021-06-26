@@ -4,7 +4,13 @@ import cors from '../../lib/cors'
 const handler = (req, res) => {
   try {
     if (req.method === 'GET') {
-      const options = {}
+      const options = {
+        requestOptions: {
+          headers: {
+            Cookies: process.env.COOKIE
+          }
+        }
+      }
 
       let parts = []
       let partialstart, partialend, start, end
@@ -27,7 +33,6 @@ const handler = (req, res) => {
         })
       }
 
-      
       ytdlcore(url, options).on('response', function (response) {
         try {
           const totalLength = response.headers['content-length']
@@ -50,13 +55,15 @@ const handler = (req, res) => {
             res.statusCode = 206
           }
 
-          ytdlcore(url, options).pipe(res).on('error', (err) => {
-            console.log(err)
-            res.status(500)
-            res.send({
-              error: 'Something went wrong...'
+          ytdlcore(url, options)
+            .pipe(res)
+            .on('error', (err) => {
+              console.log(err)
+              res.status(500)
+              res.send({
+                error: 'Something went wrong...'
+              })
             })
-          })
         } catch (err) {
           console.log(err)
         }
